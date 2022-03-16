@@ -1,0 +1,22 @@
+.arrow-left {
+    display: grid;
+    align-items: center;
+    color: grey;
+    cursor: pointer;
+}
+
+.arrow-right {
+    display: grid;
+    align-items: center;
+    color: grey;
+    cursor: pointer;
+}
+
+.carousel {
+    display: grid;
+    grid-template-columns: auto auto auto;
+}
+
+li {
+    padding: 0px 1px 0px 1px;
+}

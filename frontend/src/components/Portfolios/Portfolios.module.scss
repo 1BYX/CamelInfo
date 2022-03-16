@@ -1,0 +1,292 @@
+@import '../../variables.scss';
+
+.portfolios {
+    display: grid;
+    justify-items: center;
+    align-items: center;
+
+    &_wrapper {
+        width: 95%;
+        padding-top: 140px;
+        display: grid;
+        grid-auto-flow: row;
+        grid-row-gap: 50px;
+        justify-items: center;
+        padding-bottom: 140px;
+        max-width: 950px;
+
+        @include breakpoint(ssl) {
+            width: 90%;
+            padding-top: 60px;
+            padding-bottom: 60px;
+        }
+
+        @include breakpoint(sl) {
+            width: 95%;
+        }
+
+        @include breakpoint(md) {
+            width: 90%;
+        }
+
+        @include breakpoint(lg) {
+
+        }
+    }
+
+    &_instance_wrapper {
+        width: 100%;
+        display: grid;
+        grid-template-columns: auto 40px;
+        grid-gap: 3%;
+        justify-items: center;
+        align-items: center;
+    }
+
+    &_instance {
+        cursor: pointer;
+        border-radius: $br-big;
+        width: 100%;
+        height: 100px;
+        background-color: white;
+        align-items: center;
+        padding: 5px 5% 5px 5%;
+        box-shadow: $shadow-big;
+        
+
+        @include breakpoint(ssl) {
+            display: grid;
+            grid-template-rows: 50% 50%;
+            height: 150px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+        
+        @include breakpoint(sl) {
+            display: grid;
+            grid-template-columns: 40% 60%;
+            grid-column-gap: 20px;
+            grid-template-rows: auto;    
+        }
+
+        @include breakpoint(md) {
+            display: grid;
+            grid-template-columns: 40% 60%;
+            grid-column-gap: 20px;
+            grid-template-rows: auto;    
+        }
+
+        &_personalization {
+            display: grid;
+            align-items: center;
+
+            &_picture {
+                display: grid;
+                align-items: center;
+                justify-self: end;
+            }
+
+            &_name {
+                justify-self: start;
+            }
+
+            @include breakpoint(ssl) {
+                grid-template-columns: auto auto;
+                grid-column-gap: 10px;
+                font-size: 16px;
+                justify-items: center;
+                img {
+                    width: 40px;
+                }
+            }
+            
+            @include breakpoint(sl) {
+                grid-template-columns: 65px auto;
+                font-size: 16px;
+
+                img {
+                    width: 50px;
+                }
+            }
+
+            @include breakpoint(md) {
+                grid-template-columns: 85px auto;
+                font-size: 20px;
+
+                img {
+                    width: 65px;
+                }
+            }
+        }
+
+        &_overview {
+            display: grid;
+            grid-template-columns: auto auto auto;
+            align-items: center;
+            justify-items: center;
+
+            @include breakpoint(ssl) {
+                font-size: 12px;
+                grid-template-columns: auto auto;
+                grid-column-gap: 20px;
+            }
+            
+            @include breakpoint(sl) {
+                font-size: 14px;
+                grid-template-columns: auto auto auto;
+            }
+
+            @include breakpoint(md) {
+                font-size: 16px;
+
+            }
+
+            &_revenue {
+                width: max-content;
+
+                @include breakpoint(ssl) {
+                    justify-self: end;
+                }
+
+                @include breakpoint(sl) {
+                    justify-self: center;
+                }
+            }
+
+            &_change {
+                width: max-content;
+                border: solid green 1px;
+                border-radius: 5px;
+                padding: 5px;
+
+                @include breakpoint(ssl) {
+                    justify-self: start;
+                }
+
+                @include breakpoint(sl) {
+                    justify-self: center;
+                }
+            }
+
+            &_graph {
+                width: max-content;
+
+                @include breakpoint(ssl) {
+                    display: none;
+                }
+                
+                @include breakpoint(sl) {
+                    dislpay: grid;
+    
+                    img {
+                        width: 50px;
+                    }
+                }
+    
+                @include breakpoint(md) {
+                    display: grid;
+    
+                }
+
+                img {
+                    width: 90px;
+                }
+            }
+        }
+
+        &_dots {
+            &:hover {
+                cursor: pointer;
+            }
+            grid-row: 2/3;
+        }
+
+        
+    }
+
+    &_button {
+        height: 100px;
+        width: 120px;
+        justify-self: start;
+
+        button {
+            height: 100%;
+            width: 100%;
+            border-radius: $br-big;
+
+            box-shadow: $shadow-big;
+        }
+    }
+}
+
+.options_wrapper {
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    grid-template-rows: 62.5px 25px 62.5px;
+    height: 100%;
+
+    @include breakpoint(md) {
+        display: grid;
+        align-items: center;
+        justify-items: center;
+        grid-template-rows: 62.5px 25px 62.5px;
+        height: 100%;
+    }
+
+}
+
+.popupOptions {
+    display: grid;
+    grid-template-rows: 50% 50%;
+    padding: 5px;
+    font-size: 14px;
+    background-color: white;
+    border-radius: $br-small;
+    z-index: 50;
+    position: relative;
+    right: 30px;
+    bottom: 30px;
+    box-shadow: $shadow-big;
+
+
+    &_instance_edit {
+        display: grid;
+        grid-template-columns: 24px auto;
+        grid-gap: 2px;
+        border-bottom: solid grey 1px;
+        transition: 0.3s ease all;
+
+        &:hover {
+            background: $secondary;
+            border-radius: $br-small $br-small 0px 0px;
+            cursor: pointer;
+        }
+    }
+
+    &_instance_delete {
+        display: grid;
+        grid-template-columns: 24px auto;
+        grid-gap: 2px;
+        border-top: solid grey 1px;
+        transition: 0.3s ease all;
+
+        &:hover {
+            background: $secondary;
+            border-radius: 0px 0px $br-small $br-small;
+            cursor: pointer;
+        }
+    }
+
+    
+    span {
+        display: grid;
+        align-items: center;
+        color: #5f5f5f;
+    }
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}

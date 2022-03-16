@@ -12,4 +12,4 @@ const extractOwnerId = (token) => {
     return payload.sub
 }
 
-module.exports = extractOwnerId;
+module.exports = extractOwnerId

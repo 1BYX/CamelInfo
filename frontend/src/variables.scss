@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@100;200;300;400&display=swap');
+
+$Poppins: 'Poppins', sans-serif;
+
+
+//active colors
+$bg: #d4d4d4;
+$bg2: #ffffffec;
+$primary: #FFFFFF;
+$secondary: #B0B0B0;
+
+//font color
+$font-color-light: black;
+$font-color-dark: white;
+
+//border radius
+$br-big: 15px;
+$br-medium: 8px;
+$br-small: 5px;
+
+// spacing
+$spacing-md: 16px;
+$spacing-lg: 32px;
+
+//shadows
+$shadow-big: 
+    0 2.8px 2.2px rgba(0, 0, 0, 0.027),
+    0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+    0 12.5px 10px rgba(0, 0, 0, 0.06),
+    0 22.3px 17.9px rgba(0, 0, 0, 0.048),
+    0 41.8px 33.4px rgba(0, 0, 0, 0.034),
+    0 30px 30px rgba(0, 0, 0, 0.034);
+
+@mixin breakpoint($point) {
+    @if $point == lg {
+        //1000px
+        @media (min-width: 1000px) {
+            @content;
+        }
+    } @else if $point == md {
+        //768px
+        @media (min-width: 768px) {
+            @content;
+        }
+    } @else if $point == sl {
+        //481px
+        @media (min-width: 481px) {
+            @content;
+        }
+    } @else if $point == ssl {
+        //481px
+        @media (min-width: 0px) {
+            @content;
+        }
+    }
+}

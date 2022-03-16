@@ -12,6 +12,19 @@ const PortfolioSchema = new mongoose.Schema({
     owner: {
         type: String,
         required: true,
+    },
+    spent: {
+        type: Number,
+        required: true
+    },
+    coins: {
+        type: [{
+            id: String,
+            name: String,
+            image: String,
+            amount: Number,
+        }],
+        required: true
     }
 })
 

@@ -1,0 +1,135 @@
+@import '../../../variables.scss';
+
+.popupMenuBackground {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0, .8);
+    z-index: 1000;
+    display: grid;
+    backdrop-filter: blur(6px);
+
+    animation: fadeIn 0.3s;
+    -webkit-animation: fadeIn 0.3s;
+    -moz-animation: fadeIn 0.3s;
+    -o-animation: fadeIn 0.3s;
+    -ms-animation: fadeIn 0.3s;
+}
+
+.popupMenu {
+  width: 90%;
+  height: auto;
+  padding: 10px 0px 40px 0px;
+  z-index: 1000;
+  position: fixed;
+  background-color: $bg2;
+  border-radius: $br-big;
+  display: grid;
+  justify-items: center;
+  align-items: center;
+
+  animation: fadeIn 0.3s;
+  -webkit-animation: fadeIn 0.3s;
+  -moz-animation: fadeIn 0.3s;
+  -o-animation: fadeIn 0.3s;
+  -ms-animation: fadeIn 0.3s;
+
+  @include breakpoint(ssl) {
+    transform: translate(5vw, 10vh);
+  }
+
+  @include breakpoint(sl) {
+      width: 50%;
+      transform: translate(25vw, 20vh);
+      
+  }
+
+  @include breakpoint(md) {
+      width: 50%;
+      height: auto;
+      transform: translate(25vw, 30vh);
+  }
+
+  @include breakpoint(lg) {
+    transform: translate(25vw, 30vh);
+  }
+
+    &_instance {
+
+      &_addPortfolio {
+
+        form {
+          display: grid;
+          justify-items: center;
+          align-items: center;
+          grid-template-rows: auto auto auto;
+          grid-gap: 40px;
+        }
+
+        &_button {
+          button {
+            box-shadow: $shadow-big;
+          }
+        }
+      }
+
+      &_options {
+        background-color: $bg2;
+        display: grid;
+        align-items: center;
+        grid-template-rows: auto auto;
+      }
+    }
+} 
+
+@keyframes fadeIn {
+    0% {opacity:0;}
+    100% {opacity:1;}
+  }
+  
+  @-moz-keyframes fadeIn {
+    0% {opacity:0;}
+    100% {opacity:1;}
+  }
+  
+  @-webkit-keyframes fadeIn {
+    0% {opacity:0;}
+    100% {opacity:1;}
+  }
+  
+  @-o-keyframes fadeIn {
+    0% {opacity:0;}
+    100% {opacity:1;}
+  }
+  
+  @-ms-keyframes fadeIn {
+    0% {opacity:0;}
+    100% {opacity:1;}
+  }
+
+  @keyframes fadeOut {
+    0% {opacity:1;}
+    100% {opacity:0;}
+  }
+  
+  @-moz-keyframes fadeOut {
+    0% {opacity:1;}
+    100% {opacity:0;}
+  }
+  
+  @-webkit-keyframes fadeOut {
+    0% {opacity:1;}
+    100% {opacity:0;}
+  }
+  
+  @-o-keyframes fadeOut {
+    0% {opacity:1;}
+    100% {opacity:0;}
+  }
+  
+  @-ms-keyframes fadeOut {
+    0% {opacity:1;}
+    100% {opacity:0;}
+  }

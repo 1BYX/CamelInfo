@@ -1,0 +1,177 @@
+@import '../../../variables.scss';
+
+.addToPortfolio {
+  height: auto;
+  padding: 30px;
+  z-index: 1000;
+  position: fixed;
+  background-color: $bg2;
+  border-radius: $br-big;
+
+
+
+  animation: fadeIn 0.3s;
+  -webkit-animation: fadeIn 0.3s;
+  -moz-animation: fadeIn 0.3s;
+  -o-animation: fadeIn 0.3s;
+  -ms-animation: fadeIn 0.3s;
+
+  @include breakpoint(ssl) {
+    width: 80%;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: auto auto;
+    grid-gap: 20px;
+    transform: translate(10vw, 5vh);
+    font-size: 10px;
+  }
+
+  @include breakpoint(sl) {
+    width: 90%;
+    display: grid;
+    align-items: center;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 100%;
+    grid-column-gap: 0;
+    transform: translate(5vw, 20vh);
+    font-size: 11px;
+  }
+
+  @include breakpoint(md) {
+    width: 70%;
+    height: auto;
+    transform: translate(14.5vw, 30vh);
+    font-size: 13px;
+  }
+
+  @include breakpoint(lg) {
+    transform: translate(25vw, 30vh);
+    grid-template-columns: minmax(230px, 295px) minmax(230px, 295px);
+    justify-content: center;
+    width: 50%;
+  }
+
+  &_portfolios {
+    height: 100%;
+    display: grid;
+    grid-auto-flow: row;
+    align-content: start;
+    max-width: 295px;
+
+
+    &_singlePortfolio {
+      width: 50%;
+      min-width: 180px;
+      display: grid;
+      align-items: center;
+      grid-template-columns: max-content max-content;
+      cursor: pointer;
+  
+      img {
+        width: 50px;
+      }
+      span {
+        display: grid;
+        align-items: center;
+        padding: 5px;
+      }
+    }
+  }
+
+  &_input {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    align-items: start;
+    grid-template-rows: calc(30% - 10px) calc(50% - 10px) 20%;
+    grid-gap: 10px;
+    max-width: 295px;
+
+    &_button {
+      height: 100%;
+      width: 100%;
+      display: grid;
+      justify-items: start;
+      align-items: center;
+      
+      button {
+        box-shadow: $shadow-big;
+        width: 100%;
+      }
+    }
+  }
+}
+
+.activePortfolio {
+  border: solid rgb(148, 177, 255) 1px;
+  border-radius: $br-small;
+}
+
+
+.popupMenuBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0, .8);
+  z-index: 1000;
+  display: grid;
+  backdrop-filter: blur(6px);
+
+  animation: fadeIn 0.5s;
+  -webkit-animation: fadeIn 0.5s;
+  -moz-animation: fadeIn 0.5s;
+  -o-animation: fadeIn 0.5s;
+  -ms-animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@-moz-keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@-webkit-keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@-o-keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@-ms-keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@keyframes fadeOut {
+  0% {opacity:1;}
+  100% {opacity:0;}
+}
+
+@-moz-keyframes fadeOut {
+  0% {opacity:1;}
+  100% {opacity:0;}
+}
+
+@-webkit-keyframes fadeOut {
+  0% {opacity:1;}
+  100% {opacity:0;}
+}
+
+@-o-keyframes fadeOut {
+  0% {opacity:1;}
+  100% {opacity:0;}
+}
+
+@-ms-keyframes fadeOut {
+  0% {opacity:1;}
+  100% {opacity:0;}
+}
