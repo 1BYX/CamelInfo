@@ -84,7 +84,7 @@
     display: grid;
     align-items: start;
     grid-template-rows: calc(30% - 10px) calc(50% - 10px) 20%;
-    grid-gap: 10px;
+    grid-gap: 20px;
     max-width: 295px;
 
     &_button {

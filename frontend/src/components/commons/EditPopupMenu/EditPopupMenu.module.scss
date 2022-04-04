@@ -60,12 +60,17 @@
 
       &_addPortfolio {
 
+        &_input {
+          width: 100%;
+        }
+
         form {
           display: grid;
           justify-items: center;
           align-items: center;
           grid-template-rows: auto auto auto;
           grid-gap: 40px;
+          min-width: 280px;
         }
 
         &_button {

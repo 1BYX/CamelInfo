@@ -43,6 +43,10 @@
         width: 40%;
       }
 
+      &_amount {
+        max-width: 191px;
+      }
+
       &_buttons {
           display: grid;
           justify-items: center;

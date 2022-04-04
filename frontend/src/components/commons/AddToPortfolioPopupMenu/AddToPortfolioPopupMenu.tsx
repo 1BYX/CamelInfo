@@ -84,21 +84,20 @@ const AddToPortfolioPopupMenu: React.FC<AddToPortfolioProps> = (props) => {
         } else {
             setAmountError({
                 present: true,
-                msg: "Please specify the amount"
+                msg: "Please enter the amount"
             })
         }
 
     }
 
     const handleChangeAmount = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-        console.log(e.target.value[e.target.value.length - 1])
         if (Number(e.target.value) > 1000000000) {
             setAmountError({
                 present: true,
                 msg: "Amount can't be greater than 1.000.000.000"
             })
         } else {
-            const nums = /^\d+$/
+            const nums = /^[0-9]*\.?[0-9]*$/
             if (nums.test(e.target.value) || e.target.value === '') {
                 setAmount(e.target.value)
             }
@@ -106,6 +105,13 @@ const AddToPortfolioPopupMenu: React.FC<AddToPortfolioProps> = (props) => {
                 present: false,
                 msg: ""
             })
+        }
+    }
+
+    const handleChangeCustomPrice = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        const nums = /^[0-9]*\.?[0-9]*$/
+        if (nums.test(e.target.value) || e.target.value === '') {
+            setCustomPrice(e.target.value)
         }
     }
 
@@ -124,7 +130,6 @@ const AddToPortfolioPopupMenu: React.FC<AddToPortfolioProps> = (props) => {
                 </div>
                 <form className={classes.addToPortfolio_input} onSubmit={(e) => handleAddCoin(e)}>
                     <TextField
-                        type='number'
                         error={amountError.present}
                         helperText={amountError.msg}
                         label="Amount"
@@ -137,10 +142,9 @@ const AddToPortfolioPopupMenu: React.FC<AddToPortfolioProps> = (props) => {
 
                         helperText="Optional* Specify a custom price for which you bought the coin"
                         label="*Custom Price in USD"
-                        type="number"
                         onChange={(e) => {
                             // if (e.target.value[e.target.value.length - 1] || e.target.value[e.target.value.length - 1] === '') {
-                            setCustomPrice(e.target.value)
+                            handleChangeCustomPrice(e)
                             // }
                         }}
                         value={customPrice}

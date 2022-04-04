@@ -21,46 +21,86 @@ const AdjustAmountPopupMenu: React.FC<AdjustMenuProps> = (props) => {
 
     const updateSnackbar = useContext(updateSnackbarContext)
 
-    const [amount, setAmount] = useState<string>('') // amount of coins/USD
     const [crypto, setCrypto] = useState(false) // amount in USD or coin
+
+    const [amount, setAmount] = useState<string>('') // amount of coins/USD
     const [customPrice, setCustomPrice] = useState<string>('') // custom price
+
+    const [amountError, setAmountError] = useState({
+        present: false,
+        msg: ''
+    }) // amount of coins/USD
+
     const updatePortfolios = useContext(updatePortfoliosContext)
 
     const portfolios = useContext(portfoliosContext)
 
+    const handleChangeAmount = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        if (Number(e.target.value) > 1000000000) {
+            setAmountError({
+                present: true,
+                msg: "Amount can't be greater than 1.000.000.000"
+            })
+        } else {
+            const nums = /^[0-9]*\.?[0-9]*$/
+            if (nums.test(e.target.value) || e.target.value === '') {
+                setAmount(e.target.value)
+            }
+            setAmountError({
+                present: false,
+                msg: ""
+            })
+        }
+    }
+
+    const handleChangeCustomPrice = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        const nums = /^[0-9]*\.?[0-9]*$/
+        if (nums.test(e.target.value) || e.target.value === '') {
+            setCustomPrice(e.target.value)
+        }
+    }
+
 
     const handleAdjustAmount = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        const selectedCoin = props.portfolio.coins.find((coin: coinObject) => {
-            return coin.id === props.coinId
-        })
 
-        let spentDifference = 0
+        if (amount && amount !== '') {
+            const selectedCoin = props.portfolio.coins.find((coin: coinObject) => {
+                return coin.id === props.coinId
+            })
 
-        if (customPrice !== '') {
-            spentDifference = (Number(amount) - selectedCoin.amount) * Number(customPrice)
-        } else {
-            const currentPrice = await getNonCustomPrice(props.coinId)
-            spentDifference = (Number(amount) - selectedCoin.amount) * Number(currentPrice)
-        }
+            let spentDifference = 0
 
-
-        const res = await adjustCoinAmount(props.portfolio._id, props.coinId, Number(spentDifference), Number(amount))
-
-        if (res.success === true) {
-            updateSnackbar('success', 'You have successfully adjusted coin amount')
-        } else {
-            updateSnackbar('error', 'Error adjusting coin amount, try again later')
-        }
-
-        const newPortfolios = portfolios.map((p: portfolioObject) => {
-            if (p._id === res.updatedPortfolio._id) {
-                p = res.updatedPortfolio
+            if (customPrice !== '') {
+                spentDifference = (Number(amount) - selectedCoin.amount) * Number(customPrice)
+            } else {
+                const currentPrice = await getNonCustomPrice(props.coinId)
+                spentDifference = (Number(amount) - selectedCoin.amount) * Number(currentPrice)
             }
-            return p
-        })
 
-        updatePortfolios(newPortfolios)
+
+            const res = await adjustCoinAmount(props.portfolio._id, props.coinId, Number(spentDifference), Number(amount))
+
+            if (res.success === true) {
+                updateSnackbar('success', 'You have successfully adjusted coin amount')
+            } else {
+                updateSnackbar('error', 'Error adjusting coin amount, try again later')
+            }
+
+            const newPortfolios = portfolios.map((p: portfolioObject) => {
+                if (p._id === res.updatedPortfolio._id) {
+                    p = res.updatedPortfolio
+                }
+                return p
+            })
+
+            updatePortfolios(newPortfolios)
+        } else {
+            setAmountError({
+                present: true,
+                msg: "Please enter the amount"
+            })
+        }
     }
 
     const handleDeleteCoin = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -106,10 +146,10 @@ const AdjustAmountPopupMenu: React.FC<AdjustMenuProps> = (props) => {
                         <h2>Adjust amount for {props.title}</h2>
                     </div>
                     <div className={classes.AdjustAmount_amount}>
-                        <TextField variant="outlined" label="New Amount" value={amount} onChange={(e) => setAmount(e.target.value)} />
+                        <TextField error={amountError.present} helperText={amountError.msg} variant="outlined" label="New Amount" value={amount} onChange={(e) => handleChangeAmount(e)} />
                     </div>
                     <div className={classes.AdjustAmount_customPrice}>
-                        <TextField variant="outlined" label="*Custom Price" value={customPrice} onChange={(e) => setCustomPrice(e.target.value)} />
+                        <TextField variant="outlined" label="*Custom Price" value={customPrice} onChange={(e) => handleChangeCustomPrice(e)} />
                     </div>
                     <div className={classes.AdjustAmount_buttons}>
                         <Button variant="outlined" color="success" type="submit">Done</Button>

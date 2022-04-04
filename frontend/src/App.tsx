@@ -10,6 +10,7 @@ import Login from './components/Auth/Login'
 import Register from './components/Auth/Register'
 import CoinsContainer from './components/Coins/CoinsContainer'
 import InsidePortfolioContainer from './components/Portfolios/Portfolio/InsidePortfolioContainer'
+import MaterialUISwitch from './components/commons/DarkThemeSwitch/DarkThemeSwitch'
 
 export const updateSnackbarContext = React.createContext<(type: string, msg: string) => void>((type: string, msg: string) => { })
 

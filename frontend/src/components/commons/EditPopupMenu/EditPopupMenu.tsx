@@ -26,47 +26,62 @@ const EditPopupMenu: React.FC<popupContainerProps> = (props) => {
     const handleAddPortfolio = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
-        let element = document.getElementsByClassName('selected')
-        const child = element[0].lastElementChild?.lastChild?.lastChild
-        let tmp = document.createElement("div")
-        //@ts-ignore
-        tmp.appendChild(child)
-        const picture = tmp.innerHTML.toLowerCase()
+        if (portfolioName && portfolioName !== '') {
+            let element = document.getElementsByClassName('selected')
+            const child = element[0].lastElementChild?.lastChild?.lastChild
+            let tmp = document.createElement("div")
+            //@ts-ignore
+            tmp.appendChild(child)
+            const picture = tmp.innerHTML.toLowerCase()
 
-        const response = await createPortfolio(portfolioName, picture)
+            const response = await createPortfolio(portfolioName, picture)
 
-        if (response.success) {
-            props.renderPortfolios(response.newPortfolio)
-            updateSnackbar('success', 'You have successfully added a portfolio')
+            if (response.success) {
+                props.renderPortfolios(response.newPortfolio)
+                updateSnackbar('success', 'You have successfully added a portfolio')
+            } else {
+                updateSnackbar('error', 'Error creating portfolio, try again later')
+            }
+
+            props.handleMenuClose()
         } else {
-            updateSnackbar('error', 'Error creating portfolio, try again later')
+            setPortfolioNameError({
+                present: true,
+                msg: "Please enter the name of the portfolio"
+            })
         }
-
-        props.handleMenuClose()
     }
 
     const handleUpdatePortfolio = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
-        let element = document.getElementsByClassName('selected')
+        if (portfolioName && portfolioName !== '') {
 
-        const child = element[0].lastElementChild?.lastChild?.lastChild
+            let element = document.getElementsByClassName('selected')
 
-        let tmp = document.createElement("div")
-        //@ts-ignore
-        tmp.appendChild(child)
-        const picture = tmp.innerHTML.toLowerCase()
+            const child = element[0].lastElementChild?.lastChild?.lastChild
+
+            let tmp = document.createElement("div")
+            //@ts-ignore
+            tmp.appendChild(child)
+            const picture = tmp.innerHTML.toLowerCase()
 
 
-        const response = await updatePortfolio(props.portfolioId, { name: portfolioName, picture: picture })
-        if (response.success) {
-            props.renderPortfoliosWithUpdate(response.updatedPortfolio)
-            updateSnackbar('success', 'You have successfully updated a portfolio')
+            const response = await updatePortfolio(props.portfolioId, { name: portfolioName, picture: picture })
+            if (response.success) {
+                props.renderPortfoliosWithUpdate(response.updatedPortfolio)
+                updateSnackbar('success', 'You have successfully updated a portfolio')
+            } else {
+                updateSnackbar('error', 'Error updating portfolio, try again later')
+            }
+
+            props.handleUpdateMenuClose()
         } else {
-            updateSnackbar('error', 'Error updating portfolio, try again later')
+            setPortfolioNameError({
+                present: true,
+                msg: "Please enter the name of the portfolio"
+            })
         }
-
-        props.handleUpdateMenuClose()
     }
 
     const closeAllMenus = () => {
@@ -105,6 +120,7 @@ const EditPopupMenu: React.FC<popupContainerProps> = (props) => {
                             <form onSubmit={props.type === "addPortfolio" ? handleAddPortfolio : props.type === "updatePortfolio" ? handleUpdatePortfolio : props.handleMenuClose}>
                                 <div className={classes.popupMenu_instance_addPortfolio_input}>
                                     <TextField
+                                        fullWidth
                                         id="standard-basic"
                                         error={portfolioNameError.present}
                                         helperText={portfolioNameError.msg}
