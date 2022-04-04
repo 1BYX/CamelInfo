@@ -63,13 +63,23 @@
         }
         
         @include breakpoint(sl) {
-            display: grid;
-            grid-template-columns: 40% 60%;
-            grid-column-gap: 20px;
-            grid-template-rows: auto;    
+            height: 180px;
+            // display: grid;
+            // grid-template-columns: 40% 60%;
+            // grid-column-gap: 20px;
+            // grid-template-rows: auto;    
         }
 
         @include breakpoint(md) {
+            height: 180px;
+            // display: grid;
+            // grid-template-columns: 40% 60%;
+            // grid-column-gap: 20px;
+            // grid-template-rows: auto;    
+        }
+
+        @include breakpoint(lg) {
+            height: 150px;
             display: grid;
             grid-template-columns: 40% 60%;
             grid-column-gap: 20px;
@@ -101,15 +111,28 @@
             }
             
             @include breakpoint(sl) {
-                grid-template-columns: 65px auto;
-                font-size: 16px;
+                // grid-template-columns: 65px auto;
+                font-size: 20px;
+                padding-bottom: 20px;
+                padding-top: 10px;
 
-                img {
-                    width: 50px;
-                }
+                // img {
+                //     width: 50px;
+                // }
             }
 
             @include breakpoint(md) {
+                // grid-template-columns: 85px auto;
+                font-size: 20px;
+                padding-bottom: 20px;
+                padding-top: 10px;
+
+                // img {
+                //     width: 65px;
+                // }
+            }
+
+            @include breakpoint(lg) {
                 grid-template-columns: 85px auto;
                 font-size: 20px;
 
@@ -158,6 +181,7 @@
                 border: solid green 1px;
                 border-radius: 5px;
                 padding: 5px;
+                min-width: 100px;
 
                 @include breakpoint(ssl) {
                     justify-self: start;
@@ -176,7 +200,7 @@
                 }
                 
                 @include breakpoint(sl) {
-                    dislpay: grid;
+                    display: grid;
     
                     img {
                         width: 50px;
@@ -226,7 +250,23 @@
     grid-template-rows: 62.5px 25px 62.5px;
     height: 100%;
 
-    @include breakpoint(md) {
+    @include breakpoint(ssl) {
+        display: grid;
+        align-items: center;
+        justify-items: center;
+        grid-template-rows: 62.5px 25px 62.5px;
+        height: 100%;
+    }
+
+    @include breakpoint(sl) {
+        display: grid;
+        align-items: center;
+        justify-items: center;
+        grid-template-rows: 77.5px 25px 77.5px;
+        height: 100%;
+    }
+
+    @include breakpoint(lg) {
         display: grid;
         align-items: center;
         justify-items: center;

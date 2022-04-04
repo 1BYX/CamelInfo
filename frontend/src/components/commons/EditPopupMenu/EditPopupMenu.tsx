@@ -10,6 +10,7 @@ import { updateSnackbarContext } from '../../../App'
 const EditPopupMenu: React.FC<popupContainerProps> = (props) => {
 
     const [portfolioName, setPortfolioName] = useState("")
+    const [portfolioNameError, setPortfolioNameError] = useState({ present: false, msg: '' })
     const [portfolioPicture, setPortfolioPicture] = useState("bear")
 
     const updateSnackbar = useContext(updateSnackbarContext)
@@ -79,6 +80,21 @@ const EditPopupMenu: React.FC<popupContainerProps> = (props) => {
         return animalArray.indexOf(picture)
     }
 
+    const handleChangePortfolioName = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        if (e.target.value.length > 20) {
+            setPortfolioNameError({
+                present: true,
+                msg: "Portfolio name can't be longer than 20 symbols"
+            })
+        } else {
+            setPortfolioName(e.target.value)
+            setPortfolioNameError({
+                present: false,
+                msg: ""
+            })
+        }
+    }
+
     return ReactDom.createPortal(
         <>
             <div className={classes.popupMenuBackground} onClick={closeAllMenus} />
@@ -90,9 +106,11 @@ const EditPopupMenu: React.FC<popupContainerProps> = (props) => {
                                 <div className={classes.popupMenu_instance_addPortfolio_input}>
                                     <TextField
                                         id="standard-basic"
+                                        error={portfolioNameError.present}
+                                        helperText={portfolioNameError.msg}
                                         label="Portfolio Name"
                                         variant="standard"
-                                        onChange={e => setPortfolioName(e.target.value)}
+                                        onChange={(e) => handleChangePortfolioName(e)}
                                         value={portfolioName}
                                     />
                                 </div>

@@ -64,7 +64,6 @@ router.put('/', passport.authenticate('jwt', { session: false }), async (req, re
 
 router.get('/:id', passport.authenticate('jwt', { session: false }), async (req, res) => {
     const id = req.params.id.toString().replace(':', '')
-    console.log(id)
 
     const portfolio = await Portfolio.findOne({ _id: id })
 
@@ -86,7 +85,6 @@ router.get('/:id', passport.authenticate('jwt', { session: false }), async (req,
         }
     } catch (err) {
         res.status(500).json({ success: false, error: err, msg: 'Error getting a portfolio, try again later' })
-        console.log(err)
     }
 })
 
@@ -97,7 +95,7 @@ module.exports = router
 
 router.put('/addCoin', passport.authenticate('jwt', { session: false }), async (req, res) => {
     //get all the necessary parameters
-    const addedCoin = req.body.coin
+    const addedCoin = req.body.addedCoin
     const id = req.body.portfolioId
     const newSpent = req.body.spent
 
@@ -106,18 +104,15 @@ router.put('/addCoin', passport.authenticate('jwt', { session: false }), async (
     const owner = extractOwnerId(token)
 
     //check if portfolio exists
-    const portfolio = await Portfolio.findOne({ _id: id })
+    const oldPortfolio = await Portfolio.findOne({ _id: id })
 
     try {
-        if (portfolio && portfolio.owner === owner) {
+        if (oldPortfolio && oldPortfolio.owner === owner) {
             //portfolio where we want to add the coin, needed for comparisons
-            const oldPortfolio = await Portfolio.findOne({ _id: id })
 
             //iterate through the coins array of the oldPortfolio to find if there's already a coin with the given id
             for (let i = 0; i < oldPortfolio.coins.length; i++) {
-                console.log('made it into the loop')
                 if (oldPortfolio.coins[i]['id'] === addedCoin.id) {
-                    console.log('updated amount')
                     await Portfolio.updateOne({ _id: id, 'coins.id': addedCoin.id }, { $inc: { 'coins.$.amount': addedCoin.amount } })
                     await Portfolio.updateOne({ _id: id }, { $inc: { spent: newSpent } })
                     break
@@ -147,6 +142,93 @@ router.put('/addCoin', passport.authenticate('jwt', { session: false }), async (
         }
     } catch (err) {
         res.status(500).json({ success: false, error: err, msg: 'Error getting a portfolio, try again later' })
-        console.log(err)
+    }
+})
+
+router.put('/deleteCoin', passport.authenticate('jwt', { session: false }), async (req, res) => {
+
+    console.log(req.body)
+
+    //get all the necessary parameters
+    const coinToDelete = req.body.coinToDelete
+    const newSpent = -(req.body.newSpent)
+    const id = req.body.id
+
+    //extract token and userID for portfolio verification
+    const token = req.headers.authorization
+    const owner = extractOwnerId(token)
+
+    //check if portfolio exists
+    const oldPortfolio = await Portfolio.findOne({ _id: id })
+
+
+    try {
+        if (oldPortfolio && oldPortfolio.owner === owner) {
+            //portfolio where we want to add the coin, needed for comparisons
+
+            for (let i = 0; i < oldPortfolio.coins.length; i++) {
+                if (oldPortfolio.coins[i].id === coinToDelete) {
+                    await Portfolio.updateOne({ _id: id }, { $pull: { coins: { id: coinToDelete } } })
+                    await Portfolio.updateOne({ _id: id }, { $inc: { spent: newSpent } })
+                    break
+                }
+            }
+
+            //return the updated portfolio for displaying on the frontend
+            const updatedPortfolio = await Portfolio.find({ _id: id })
+
+            res.status(200).json({ success: true, updatedPortfolio: updatedPortfolio[0], msg: "The coin has been successfully deleted" })
+
+            //error handling
+        } else {
+            res.status(400).json({ success: false, msg: "Error accessing portflio" })
+        }
+    } catch (err) {
+        console.error(err)
+    }
+})
+
+
+
+router.put('/adjustCoinAmount', passport.authenticate('jwt', { session: false }), async (req, res) => {
+
+    //get all the necessary parameters
+    const coinToUpdate = req.body.coinToUpdate
+    const newSpent = req.body.newSpent
+    const id = req.body.id
+    const newCoinAmount = req.body.newCoinAmount
+    console.log(req.body)
+
+    //extract token and userID for portfolio verification
+    const token = req.headers.authorization
+    const owner = extractOwnerId(token)
+
+    //check if portfolio exists
+    const oldPortfolio = await Portfolio.findOne({ _id: id })
+
+
+    try {
+        if (oldPortfolio && oldPortfolio.owner === owner) {
+            //portfolio where we want to add the coin, needed for comparisons
+
+            for (let i = 0; i < oldPortfolio.coins.length; i++) {
+                if (oldPortfolio.coins[i]['id'] === coinToUpdate) {
+                    await Portfolio.updateOne({ _id: id, 'coins.id': coinToUpdate }, { $set: { 'coins.$.amount': newCoinAmount } })
+                    await Portfolio.updateOne({ _id: id }, { $inc: { spent: newSpent } })
+
+                    //return the updated portfolio for displaying on the frontend
+                    const updatedPortfolio = await Portfolio.find({ _id: id })
+
+                    res.status(200).json({ success: true, updatedPortfolio: updatedPortfolio[0], msg: "The coin has been successfully deleted" })
+
+                    break
+                }
+                //error handling
+            }
+        } else {
+            res.status(400).json({ success: false, msg: "Error accessing portflio" })
+        }
+    } catch (err) {
+        console.error(err)
     }
 })

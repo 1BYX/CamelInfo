@@ -7,6 +7,7 @@ import classes from './Coins.module.scss'
 import { parentPort } from 'worker_threads'
 import AddToPortfolioPopupMenu from '../commons/AddToPortfolioPopupMenu/AddToPortfolioPopupMenu'
 import { portfoliosContext } from '../../AppContainer'
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 interface coinsProps {
     coins: any
@@ -159,22 +160,12 @@ const Coins: React.FC<coinsProps> = (props) => {
                                 </li>
                             </ul>
                             <div className={classes.options} onClick={() => togglePopupOptions(c.id)}>
-                                <div className={classes.empty}>
-                                    {popupOptionsOpen.isOpen && c.id === popupOptionsOpen.id ?
-                                        <div className={classes.popupOptions} onClick={() => handleAddToPortfolioMenuOpen(c.id, c.name, c.image)}>
-                                            <span className={classes.popupOptions_add}>
-                                                Add to portfolio
-                                        </span>
-                                        </div>
-                                        : null
-                                    }
-                                </div>
-                                <Icon
-                                    icon="bi:three-dots"
-                                    inline={true} width="25"
-                                    height="25" color="gray"
+                                <div className={classes.empty}></div>
+                                <AddRoundedIcon
                                     className={classes.coins_dots}
-                                /></div>
+                                    onClick={() => handleAddToPortfolioMenuOpen(c.id, c.name, c.image)}
+                                />
+                            </div>
                             <div className={classes.empty}></div>
                         </div>
                     ))}

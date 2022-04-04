@@ -3,19 +3,19 @@ import Portfolios from './Portfolios'
 import { getPortfolios } from '../API/portfolioApi'
 import Loader from '../commons/Loader/Loader'
 import { portfolioObject } from '../../Interfaces/PortfolioInterfaces'
-import { currentUserContext, currentUserInterface, portfoliosContext, updatePortfoliosContext } from '../../AppContainer'
+import { currentUserContext, currentUserInterface, portfoliosContext, pricesContext, updatePortfoliosContext } from '../../AppContainer'
 import { updateSnackbarContext } from '../../App'
 
 
 
 const PortfoliosContainer: React.FC = () => {
 
-    // const [portfolios, setPortfolios] = useState<portfolioObject[]>([])
     const [isPending, setIsPending] = useState(false)
 
     const updateSnackbar = useContext(updateSnackbarContext)
     const portfolios = useContext(portfoliosContext)
     const updatePortfolios = useContext(updatePortfoliosContext)
+    const dynamicPrices = useContext(pricesContext)
 
     const renderPortfolios = (newPortfolio: portfolioObject) => {
         updatePortfolios([...portfolios, newPortfolio])
@@ -38,15 +38,7 @@ const PortfoliosContainer: React.FC = () => {
         updatePortfolios(newPortfolios)
     }
 
-    // const fetchPortfolios = async () => {
-    //     setIsPending(true)
-    //     const response = await getPortfolios()
-    //     if (response.success !== true) {
-    //         updateSnackbar('error', 'Error getting portfolios, try again later')
-    //     }
-    //     setPortfolios(response.portfolios)
-    //     setIsPending(false);
-    // }
+
 
     useEffect(() => {
         if (!portfolios) {
@@ -58,7 +50,7 @@ const PortfoliosContainer: React.FC = () => {
 
     return (
         <div>
-            {isPending ? <div style={{ height: '100vh' }}><Loader /></div> : <Portfolios portfolios={portfolios} renderPortfolios={renderPortfolios} renderPortfoliosWithUpdate={renderPortfoliosWithUpdate} renderPortfoliosWithoutDeleted={renderPortfoliosWithoutDeleted} />}
+            {isPending ? <div style={{ height: '100vh' }}><Loader /></div> : <Portfolios portfolios={portfolios} renderPortfolios={renderPortfolios} renderPortfoliosWithUpdate={renderPortfoliosWithUpdate} renderPortfoliosWithoutDeleted={renderPortfoliosWithoutDeleted} dynamicPrices={dynamicPrices} />}
         </div>
     )
 

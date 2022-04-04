@@ -36,7 +36,6 @@ export const createPortfolio = async (portfolioName: string, picture: string) =>
 }
 
 export const deletePortfolio = async (portfolioId: string) => {
-    console.log(portfolioId)
     const res = await instance.delete('/', { data: { portfolioId: portfolioId } })
     return res.data
 }
@@ -52,6 +51,16 @@ export const updatePortfolio = async (portfolioId: string | undefined, payload: 
 
 export const addCoin = async (addedCoin: coinObject, portfolioId: string, spent: number) => {
     const res = await instance.put('/addCoin', { addedCoin: addedCoin, portfolioId: portfolioId, spent: spent })
-    console.log(res.data)
+    // export const deleteCoin = async (coinId: string)
+    return res.data
+}
+
+export const adjustCoinAmount = async (portfolioId: string, coinToUpdate: string, newSpent: number | null, newCoinAmount: number | null) => {
+    const res = await instance.put('/adjustCoinAmount', { coinToUpdate: coinToUpdate, newSpent: newSpent, id: portfolioId, newCoinAmount: newCoinAmount })
+    return res.data
+}
+
+export const deleteCoin = async (portfolioId: string, coinToDelete: string, newSpent: number) => {
+    const res = await instance.put('/deleteCoin', { coinToDelete: coinToDelete, newSpent: newSpent, id: portfolioId })
     return res.data
 }

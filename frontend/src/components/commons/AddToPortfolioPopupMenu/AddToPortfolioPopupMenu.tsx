@@ -7,6 +7,7 @@ import { portfolioObject } from '../../../Interfaces/PortfolioInterfaces'
 import { getNonCustomPrice } from '../../API/coinsAPI'
 import { addCoin } from '../../API/portfolioApi'
 import { coinObject } from '../../../Interfaces/CoinInterfaces'
+import { updateSnackbarContext } from '../../../App'
 
 interface AddToPortfolioProps {
     portfolios: Array<portfolioObject>
@@ -18,47 +19,94 @@ interface AddToPortfolioProps {
 
 const AddToPortfolioPopupMenu: React.FC<AddToPortfolioProps> = (props) => {
 
+    const updateSnackbar = useContext(updateSnackbarContext)
+
     const [activePortfolio, setActivePortfolio] = useState({
         id: '',
         name: ''
     }) // what portfolio to add to
-    const [amount, setAmount] = useState('') // amount of coins/USD
     const [crypto, setCrypto] = useState(false) // amount in USD or coin
+
+    const [amount, setAmount] = useState('') // amount of coins/USD
     const [customPrice, setCustomPrice] = useState<string>('') // custom price
+
+    const [amountError, setAmountError] = useState({
+        present: false,
+        msg: ''
+    }) // error setter for amount
+    const [customPriceError, setCustomPriceError] = useState({
+        present: false,
+        msg: ''
+    }) // error setter for custom price
+
     const updatePortfolios = useContext(updatePortfoliosContext)
 
-    const handleAddToPortfolio = async () => {
+    const handleAddCoin = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
 
-        const addedCoin: coinObject = {
-            id: props.coinId,
-            name: props.coinName,
-            image: props.coinImage,
-            amount: Number(amount)
-        }
-        const portfolioId = activePortfolio.id
-        let spent
+        if (amount && amount !== '') {
 
-        if (customPrice !== '') {
-            spent = await getNonCustomPrice(props.coinId)
-        } else {
-            spent = customPrice
-        }
+            props.closeFunction()
+            const addedCoin: coinObject = {
+                id: props.coinId,
+                name: props.coinName,
+                image: props.coinImage,
+                amount: Number(amount)
+            }
+            const portfolioId = activePortfolio.id
+            let spent = 0
 
-        const res = await addCoin(addedCoin, portfolioId, spent)
-        const updatedPortfolio = res.updatedPortfolio
-
-        //modify external portfolios context here, in order to display it in portfolios.
-
-        const newPortfolios = props.portfolios.map((p: portfolioObject) => {
-            if (p._id === updatedPortfolio._id) {
-                p = res.updatedPortfolio
+            if (customPrice === '') {
+                spent = await getNonCustomPrice(props.coinId)
+                spent *= Number(amount)
+            } else {
+                spent = Number(customPrice) * Number(amount)
             }
 
-            return p
-        })
+            const res = await addCoin(addedCoin, portfolioId, spent)
 
-        updatePortfolios(newPortfolios)
+            if (res.success === true) {
+                updateSnackbar('success', 'You have successfully added a coin')
+            } else {
+                updateSnackbar('error', 'Error adding a coin, try again later')
+            }
 
+            //modify external portfolios context here, in order to display it in portfolios.
+
+            const newPortfolios = props.portfolios.map((p: portfolioObject) => {
+                if (p._id === res.updatedPortfolio._id) {
+                    p = res.updatedPortfolio
+                }
+                return p
+            })
+
+            updatePortfolios(newPortfolios)
+        } else {
+            setAmountError({
+                present: true,
+                msg: "Please specify the amount"
+            })
+        }
+
+    }
+
+    const handleChangeAmount = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        console.log(e.target.value[e.target.value.length - 1])
+        if (Number(e.target.value) > 1000000000) {
+            setAmountError({
+                present: true,
+                msg: "Amount can't be greater than 1.000.000.000"
+            })
+        } else {
+            const nums = /^\d+$/
+            if (nums.test(e.target.value) || e.target.value === '') {
+                setAmount(e.target.value)
+            }
+            setAmountError({
+                present: false,
+                msg: ""
+            })
+        }
     }
 
 
@@ -68,25 +116,25 @@ const AddToPortfolioPopupMenu: React.FC<AddToPortfolioProps> = (props) => {
             <div className={classes.addToPortfolio}>
                 <div className={classes.addToPortfolio_portfolios}>
                     {props.portfolios.map((p: portfolioObject) => (
-                        <div className={`${classes.addToPortfolio_portfolios_singlePortfolio} ${activePortfolio.id === p._id && classes.activePortfolio}`} onClick={() => setActivePortfolio({ id: p._id, name: p.name })}>
+                        <div key={p._id} className={`${classes.addToPortfolio_portfolios_singlePortfolio} ${activePortfolio.id === p._id && classes.activePortfolio}`} onClick={() => setActivePortfolio({ id: p._id, name: p.name })}>
                             <span><img src={'../../../../animalIcons/' + p.picture + '.png'} /></span>
                             <span>{p.name}</span>
                         </div>
                     ))}
                 </div>
-                <form className={classes.addToPortfolio_input}>
+                <form className={classes.addToPortfolio_input} onSubmit={(e) => handleAddCoin(e)}>
                     <TextField
-                        helperText=""
+                        type='number'
+                        error={amountError.present}
+                        helperText={amountError.msg}
                         label="Amount"
-                        type="number"
                         onChange={(e) => {
-                            if (e.target.value[e.target.value.length - 1]) {
-                                setAmount(e.target.value)
-                            }
+                            handleChangeAmount(e)
                         }}
                         value={amount}
                     />
                     <TextField
+
                         helperText="Optional* Specify a custom price for which you bought the coin"
                         label="*Custom Price in USD"
                         type="number"
@@ -98,7 +146,7 @@ const AddToPortfolioPopupMenu: React.FC<AddToPortfolioProps> = (props) => {
                         value={customPrice}
                     />
                     <div className={classes.addToPortfolio_input_button}>
-                        <Button variant="contained" color="warning">Add to {activePortfolio.name}</Button>
+                        <Button variant="contained" color="warning" type="submit">Add to {activePortfolio.name}</Button>
                     </div>
                 </form>
             </div>

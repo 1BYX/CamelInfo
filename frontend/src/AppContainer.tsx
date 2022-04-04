@@ -18,6 +18,11 @@ export const currentUserContext = React.createContext<currentUserInterface | nul
 export const updateCurrentUserContext = React.createContext<((newUser: currentUserInterface | null) => void)>(() => { })
 export const portfoliosContext = React.createContext<Array<portfolioObject>>([])
 export const updatePortfoliosContext = React.createContext<((newPortfolios: Array<portfolioObject>) => void)>(() => { })
+export const revenuesContext = React.createContext<Array<{
+    portfolioId: string
+    revenue: number
+}>>([])
+export const updateRevenuesContext = React.createContext<((portfolioId: string, revenue: number) => void)>(() => { })
 
 export const pricesContext = React.createContext<any>([])
 
@@ -28,6 +33,40 @@ const AppContainer = () => {
     const [isPending, setIsPending] = useState(false)
     const [dynamicPrices, setDynamicPrices] = useState<object>({})
     const [ids, setIds] = useState<Array<string>>([])
+    const [revenues, setRevenues] = useState<Array<{
+        portfolioId: string
+        revenue: number
+    }>>([])
+
+    const updateRevenues = (portfolioId: string, revenue: number) => {
+        for (let i = 0; i < portfolios.length; i++) {
+            if (revenues.length > 0) {
+                for (let j = 0; j < revenues.length; j++) {
+                    if (portfolioId === revenues[j].portfolioId) {
+                        const tempRevenues = [...revenues]
+                        tempRevenues[j].revenue = revenue
+                        setRevenues(tempRevenues)
+                    } else {
+                        setRevenues(prevRevenues => [
+                            ...prevRevenues,
+                            {
+                                portfolioId: portfolioId,
+                                revenue: revenue
+                            }
+                        ])
+                    }
+                }
+            } else {
+                setRevenues(prevRevenues => [
+                    ...prevRevenues,
+                    {
+                        portfolioId: portfolioId,
+                        revenue: revenue
+                    }
+                ])
+            }
+        }
+    }
 
     const udpateCurrentUser = (newUser: currentUserInterface | null) => {
         if (newUser) {
@@ -106,12 +145,12 @@ const AppContainer = () => {
         }
         setPricesOnPortfolioChange()
 
-        setInterval(async () => {
-            const newPrices = await getPrices(newIds)
-            if (Object.keys(newPrices).length > 0) {
-                setDynamicPrices({ ...newPrices })
-            }
-        }, 4000)
+        // setInterval(async () => {
+        //     const newPrices = await getPrices(newIds)
+        //     if (Object.keys(newPrices).length > 0) {
+        //         setDynamicPrices({ ...newPrices })
+        //     }
+        // }, 4000)
     }, [portfolios])
 
     return (
@@ -121,7 +160,11 @@ const AppContainer = () => {
                     <portfoliosContext.Provider value={portfolios}>
                         <updatePortfoliosContext.Provider value={updatePortfolios}>
                             <pricesContext.Provider value={dynamicPrices}>
-                                <App />
+                                <revenuesContext.Provider value={revenues}>
+                                    <updateRevenuesContext.Provider value={updateRevenues}>
+                                        <App />
+                                    </updateRevenuesContext.Provider>
+                                </revenuesContext.Provider>
                             </pricesContext.Provider>
                         </updatePortfoliosContext.Provider>
                     </portfoliosContext.Provider>

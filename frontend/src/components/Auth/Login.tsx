@@ -13,30 +13,77 @@ const Login: React.FC = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
+    const [usernameError, setUsernameError] = useState({ present: false, msg: '' })
+    const [passwordError, setPasswordError] = useState({ present: false, msg: '' })
+
     const currentUser = useContext(currentUserContext)
     const updateCurrentUser = useContext(updateCurrentUserContext)
     const updateSnackbar = useContext(updateSnackbarContext)
 
     const navigate = useNavigate()
 
+    const handleChangeUsername = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        if (e.target.value.length > 20) {
+            setUsernameError({
+                present: true,
+                msg: "Username can't be longer than 20 symbols"
+            })
+        } else {
+            setUsername(e.target.value)
+            setUsernameError({
+                present: false,
+                msg: ""
+            })
+        }
+    }
+
+    const handleChangePassword = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        if (e.target.value.length > 20) {
+            setPasswordError({
+                present: true,
+                msg: "Password can't be longer than 20 symbols"
+            })
+        } else {
+            setPassword(e.target.value)
+            setPasswordError({
+                present: false,
+                msg: ""
+            })
+        }
+    }
+
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (username && username !== '' && password && password !== '') {
-            const response = await login(username, password)
-            console.log(response)
-            if (response.success === true) {
-                setUsername('')
-                setPassword('')
-                updateCurrentUser({
-                    id: response.user._id,
-                    username: response.user.username
+            if (username.length < 4) {
+                setUsernameError({
+                    present: true,
+                    msg: "Username can't be shorter than 4 symbols long"
                 })
-                navigate('/portfolios')
             } else {
-                updateSnackbar('error', 'Error logging in, try again later')
+                const response = await login(username, password)
+                console.log(response)
+                if (response.success === true) {
+                    setUsername('')
+                    setPassword('')
+                    updateCurrentUser({
+                        id: response.user._id,
+                        username: response.user.username
+                    })
+                    navigate('/portfolios')
+                } else {
+                    updateSnackbar('error', 'Error logging in, try again later')
+                }
             }
         } else {
-            console.log('error bruh')
+            setUsernameError({
+                present: true,
+                msg: "Please enter your username"
+            })
+            setPasswordError({
+                present: true,
+                msg: "Please enter your password"
+            })
         }
     }
 
@@ -44,10 +91,10 @@ const Login: React.FC = () => {
         <div className={classes.login}>
             <form className={classes.login_wrapper} onSubmit={handleLogin}>
                 <div className={classes.login_input}>
-                    <TextField variant="standard" label="Username" name="username" onChange={(e) => setUsername(e.target.value)} value={username} />
+                    <TextField error={usernameError.present} helperText={usernameError.msg} variant="standard" label="Username" name="username" onChange={(e) => handleChangeUsername(e)} value={username} />
                 </div>
                 <div className={classes.login_input}>
-                    <TextField variant="standard" label="Password" name="password" type="password" onChange={(e) => setPassword(e.target.value)} value={password} />
+                    <TextField error={passwordError.present} helperText={passwordError.msg} variant="standard" label="Password" name="password" type="password" onChange={(e) => handleChangePassword(e)} value={password} />
                 </div>
                 <div className={classes.login_button}>
                     <div className={classes.login_button_wrapper}>

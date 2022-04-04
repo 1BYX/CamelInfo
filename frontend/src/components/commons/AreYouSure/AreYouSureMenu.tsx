@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import classes from './AreYouSure.module.scss'
 import ReactDom from 'react-dom'
 import { Button } from '@mui/material'
@@ -11,6 +11,7 @@ interface AreYouSureProps {
 }
 
 const AreYouSureMenu: React.FC<AreYouSureProps> = (props) => {
+
     return ReactDom.createPortal(
         <>
             <div className={classes.popupMenuBackground} onClick={props.closeFunction} />

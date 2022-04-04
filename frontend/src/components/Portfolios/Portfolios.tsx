@@ -1,16 +1,18 @@
-import React, { Dispatch, SetStateAction, useContext, useState } from 'react'
+import React, { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react'
 import './Portfolios.module.scss'
 import { Button } from '@mui/material'
 import classes from './Portfolios.module.scss'
 import { Icon } from '@iconify/react'
 import EditPopupMenu from '../commons/EditPopupMenu/EditPopupMenu'
 import { portfolioObject } from '../../Interfaces/PortfolioInterfaces'
-import EditIcon from '@mui/icons-material/Edit';
+import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { deletePortfolio } from '../API/portfolioApi'
 import AreYouSureMenu from '../commons/AreYouSure/AreYouSureMenu'
 import { updateSnackbarContext } from '../../App'
 import { Link } from 'react-router-dom'
+import { portfoliosContext, revenuesContext } from '../../AppContainer'
+import PortfolioInline from './PortfolioInline'
 
 const ACTIONS = {
     SET_PORTFOLIOS: 'set_portfolios'
@@ -20,7 +22,8 @@ interface portfolioProps {
     portfolios: portfolioObject[],
     renderPortfolios: (newPortfolio: portfolioObject) => void,
     renderPortfoliosWithUpdate: (updatedPortfolio: portfolioObject) => void,
-    renderPortfoliosWithoutDeleted: (deletedPortfolioId: string) => void
+    renderPortfoliosWithoutDeleted: (deletedPortfolioId: string) => void,
+    dynamicPrices: any
 }
 
 
@@ -51,7 +54,6 @@ const Portfolios: React.FC<portfolioProps> = (props) => {
             ...prevState,
             isOpen: false
         }))
-
     }
 
     const handleDeletePortfolio = async (deletedPortfolio: string) => {
@@ -108,28 +110,7 @@ const Portfolios: React.FC<portfolioProps> = (props) => {
 
                 {props.portfolios.map((p: portfolioObject) => (
                     <div className={classes.portfolios_instance_wrapper} key={p._id}>
-                        <Link to={`/portfolios/${p._id}`} className={classes.portfolios_instance} key={p._id}>
-                            <div className={classes.portfolios_instance_personalization}>
-                                <div className={classes.portfolios_instance_personalization_picture}>
-                                    <img src={`../../../animalIcons/${p.picture}.png`} />
-                                </div>
-                                <div className={classes.portfolios_instance_personalization_name}>
-                                    <h4>{p.name}</h4>
-                                </div>
-                            </div>
-                            <div className={classes.portfolios_instance_overview}>
-                                <div className={classes.portfolios_instance_overview_revenue}>
-                                    <div><p>Revenue:</p></div>
-                                    <div><p>43057.19 $</p></div>
-                                </div>
-                                <div className={classes.portfolios_instance_overview_change}>
-                                    <div><p>Profit:</p></div>
-                                    <div><p>43057.19 $</p></div></div>
-                                <div className={classes.portfolios_instance_overview_graph}>
-                                    <img src={`../../../animalIcons/graph.png`} />
-                                </div>
-                            </div>
-                        </Link>
+                        <PortfolioInline portfolio={p} dynamicPrices={props.dynamicPrices} />
                         <div className={classes.options_wrapper}>
                             {stateOfOption.id === p._id && stateOfOption.isOpen &&
                                 <div className={classes.popupOptions}>
