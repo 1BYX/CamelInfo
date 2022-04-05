@@ -65,6 +65,8 @@ const AdjustAmountPopupMenu: React.FC<AdjustMenuProps> = (props) => {
         e.preventDefault()
 
         if (amount && amount !== '') {
+            props.closeFunction()
+
             const selectedCoin = props.portfolio.coins.find((coin: coinObject) => {
                 return coin.id === props.coinId
             })
@@ -105,6 +107,8 @@ const AdjustAmountPopupMenu: React.FC<AdjustMenuProps> = (props) => {
 
     const handleDeleteCoin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+
+        props.closeFunction()
 
         const selectedCoin = props.portfolio.coins.find((coin: coinObject) => {
             return coin.id === props.coinId

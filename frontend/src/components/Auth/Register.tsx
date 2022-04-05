@@ -11,6 +11,14 @@ const Register: React.FC = () => {
 
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+
+    const [usernameError, setUsernameError] = useState({ present: false, msg: '' })
+    const [passwordError, setPasswordError] = useState({ present: false, msg: '' })
+    const [repeatPasswordError, setRepeatPasswordError] = useState({
+        present: false,
+        msg: ''
+    })
+
     const [repeatPassword, setRepeatPassword] = useState('')
 
     const currentUser = useContext(currentUserContext)
@@ -19,25 +27,79 @@ const Register: React.FC = () => {
 
     const navigate = useNavigate()
 
+    const handleChangeUsername = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        if (e.target.value.length > 20) {
+            setUsernameError({
+                present: true,
+                msg: "The name can't be longer than 20 symbols"
+            })
+        } else {
+            setUsername(e.target.value)
+            setUsernameError({
+                present: false,
+                msg: ''
+            })
+        }
+    }
+
+    const handleChangePassword = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        if (e.target.value.length > 20) {
+            setPasswordError({
+                present: true,
+                msg: "The name can't be longer than 20 symbols"
+            })
+        } else {
+            setPassword(e.target.value)
+            setPasswordError({
+                present: false,
+                msg: ''
+            })
+        }
+    }
+
+    const handleChangeRepeatPassword = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        if (e.target.value.length <= 20) {
+            setRepeatPassword(e.target.value)
+            setRepeatPasswordError({
+                present: false,
+                msg: ''
+            })
+        }
+    }
+
 
     const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        if (username && username !== '' && password && password !== '' && password === repeatPassword) {
-            const response = await register(username, password)
-            console.log(response)
-            if (response.success === true) {
-                setUsername('')
-                setPassword('')
-                updateCurrentUser({
-                    id: response.user._id,
-                    username: response.user.username
-                })
-                navigate('/portfolios')
+        if (username && username !== '' && password && password !== '') {
+            if (password === repeatPassword) {
+                const response = await register(username, password)
+                console.log(response)
+                if (response.success === true) {
+                    setUsername('')
+                    setPassword('')
+                    updateCurrentUser({
+                        id: response.user._id,
+                        username: response.user.username
+                    })
+                    navigate('/portfolios')
+                } else {
+                    setRepeatPasswordError({
+                        present: true,
+                        msg: "Passwords don't match"
+                    })
+                }
             } else {
                 updateSnackbar('error', 'Error registering, try again later')
             }
         } else {
-            console.log('error bruh')
+            setUsernameError({
+                present: true,
+                msg: "Please enter your username"
+            })
+            setPasswordError({
+                present: true,
+                msg: "Please enter your password"
+            })
         }
     }
 
@@ -45,13 +107,13 @@ const Register: React.FC = () => {
         <div className={classes.login}>
             <form className={classes.login_wrapper} onSubmit={handleRegister}>
                 <div className={classes.login_input}>
-                    <TextField variant="standard" label="Username" name="username" onChange={(e) => setUsername(e.target.value)} />
+                    <TextField error={usernameError.present} helperText={usernameError.msg} variant="standard" label="Username" name="username" onChange={(e) => handleChangeUsername(e)} />
                 </div>
                 <div className={classes.login_input}>
-                    <TextField variant="standard" label="Password" name="password" type="password" onChange={(e) => setPassword(e.target.value)} />
+                    <TextField error={passwordError.present} helperText={passwordError.msg} variant="standard" label="Password" name="password" type="password" onChange={(e) => handleChangePassword(e)} />
                 </div>
                 <div className={classes.login_input}>
-                    <TextField variant="standard" label="Repeat password" name="repeatPassword" type="password" onChange={(e) => setRepeatPassword(e.target.value)} />
+                    <TextField error={repeatPasswordError.present} helperText={repeatPasswordError.msg} variant="standard" label="Repeat password" name="repeatPassword" type="password" onChange={(e) => handleChangeRepeatPassword(e)} />
                 </div>
                 <div className={classes.login_button}>
                     <div className={classes.login_button_wrapper}>
