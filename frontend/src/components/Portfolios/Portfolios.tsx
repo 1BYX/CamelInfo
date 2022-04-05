@@ -10,8 +10,8 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import { deletePortfolio } from '../API/portfolioApi'
 import AreYouSureMenu from '../commons/AreYouSure/AreYouSureMenu'
 import { updateSnackbarContext } from '../../App'
-import { Link } from 'react-router-dom'
-import { portfoliosContext, revenuesContext } from '../../AppContainer'
+import { Link, Navigate } from 'react-router-dom'
+import { currentUserContext, portfoliosContext, revenuesContext } from '../../AppContainer'
 import PortfolioInline from './PortfolioInline'
 
 const ACTIONS = {
@@ -22,8 +22,8 @@ interface portfolioProps {
     portfolios: portfolioObject[],
     renderPortfolios: (newPortfolio: portfolioObject) => void,
     renderPortfoliosWithUpdate: (updatedPortfolio: portfolioObject) => void,
-    renderPortfoliosWithoutDeleted: (deletedPortfolioId: string) => void,
     dynamicPrices: any
+    renderPortfoliosWithoutDeleted: (deletedPortfolioId: string) => void,
 }
 
 
@@ -38,6 +38,7 @@ const Portfolios: React.FC<portfolioProps> = (props) => {
     const [updatePayload, setUpdatePayload] = useState({ name: "", picture: "" })
 
     const updateSnackbar = useContext(updateSnackbarContext)
+    const currentUser = useContext(currentUserContext)
 
     const handleMenuOpen = () => {
         setIsAddOpen(true)
@@ -106,45 +107,47 @@ const Portfolios: React.FC<portfolioProps> = (props) => {
 
     return (
         <div className={classes.portfolios}>
-            <div className={classes.portfolios_wrapper}>
+            {currentUser ?
+                <div className={classes.portfolios_wrapper}>
 
-                {props.portfolios.map((p: portfolioObject) => (
-                    <div className={classes.portfolios_instance_wrapper} key={p._id}>
-                        <PortfolioInline portfolio={p} dynamicPrices={props.dynamicPrices} />
-                        <div className={classes.options_wrapper}>
-                            {stateOfOption.id === p._id && stateOfOption.isOpen &&
-                                <div className={classes.popupOptions}>
-                                    <div className={classes.popupOptions_instance}>
-                                        <div className={classes.popupOptions_instance_edit} onClick={() => handleUpdateMenuOpen(p.name, p.picture)}>
-                                            <span><EditIcon className={classes.popupOptions_instance_icon} /></span><span>Edit</span>
-                                        </div>
-                                        <div className={classes.popupOptions_instance_delete} onClick={() => handleDeleteMenuOpen(p._id)}>
-                                            <span><DeleteIcon className={classes.popupOptions_instance_icon} /></span><span>Delete</span>
+                    {props.portfolios.map((p: portfolioObject) => (
+                        <div className={classes.portfolios_instance_wrapper} key={p._id}>
+                            <PortfolioInline portfolio={p} dynamicPrices={props.dynamicPrices} />
+                            <div className={classes.options_wrapper}>
+                                {stateOfOption.id === p._id && stateOfOption.isOpen &&
+                                    <div className={classes.popupOptions}>
+                                        <div className={classes.popupOptions_instance}>
+                                            <div className={classes.popupOptions_instance_edit} onClick={() => handleUpdateMenuOpen(p.name, p.picture)}>
+                                                <span><EditIcon className={classes.popupOptions_instance_icon} /></span><span>Edit</span>
+                                            </div>
+                                            <div className={classes.popupOptions_instance_delete} onClick={() => handleDeleteMenuOpen(p._id)}>
+                                                <span><DeleteIcon className={classes.popupOptions_instance_icon} /></span><span>Delete</span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            }
-                            <Icon
-                                icon="bi:three-dots"
-                                inline={true} width="25"
-                                height="25" color="gray"
-                                className={classes.portfolios_instance_dots}
-                                onClick={() => handleOptionsToggle(p._id)}
-                            />
-                            <div></div>
+                                }
+                                <Icon
+                                    icon="bi:three-dots"
+                                    inline={true} width="25"
+                                    height="25" color="gray"
+                                    className={classes.portfolios_instance_dots}
+                                    onClick={() => handleOptionsToggle(p._id)}
+                                />
+                                <div></div>
+                            </div>
+
                         </div>
 
-                    </div>
+                    ))}
 
-                ))}
-
-                {props.portfolios.length < 5 ?
-                    <div className={classes.portfolios_button}>
-                        <Button variant="contained" color="warning" onClick={handleMenuOpen}>Create New</Button>
-                    </div>
-                    : null
-                }
-            </div>
+                    {props.portfolios.length < 5 ?
+                        <div className={classes.portfolios_button}>
+                            <Button variant="contained" color="warning" onClick={handleMenuOpen}>Create New</Button>
+                        </div>
+                        : null
+                    }
+                </div>
+                : <Navigate to='/login' />}
             {isAddOpen ?
                 <EditPopupMenu
                     type="addPortfolio"

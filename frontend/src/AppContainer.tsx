@@ -122,6 +122,10 @@ const AppContainer = () => {
     }
 
     useEffect(() => {
+        fetchPortfolios()
+    }, [currentUser])
+
+    useEffect(() => {
         setIsPending(true)
         fetchUser().catch(console.error)
         fetchPortfolios().catch(console.error)

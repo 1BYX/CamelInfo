@@ -4,7 +4,7 @@ import classes from './Header.module.scss'
 import { Link, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import Button from '@mui/material/Button'
-import { currentUserContext, currentUserInterface, updateCurrentUserContext } from '../../AppContainer'
+import { currentUserContext, currentUserInterface, updateCurrentUserContext, updatePortfoliosContext } from '../../AppContainer'
 import AreYouSureMenu from '../commons/AreYouSure/AreYouSureMenu'
 import { Switch } from '@mui/material'
 import LightModeIcon from '@mui/icons-material/LightMode';
@@ -24,6 +24,8 @@ const Header: React.FC = () => {
 
     const currentUser = useContext(currentUserContext)
     const updateCurrentUser = useContext(updateCurrentUserContext)
+
+    const updatePortfolios = useContext(updatePortfoliosContext)
 
     useEffect(() => {
         const handleResize = () => {
@@ -59,6 +61,7 @@ const Header: React.FC = () => {
         setLogoutMenuOpen(false)
         localStorage.removeItem('token')
         updateCurrentUser(null)
+        updatePortfolios([])
         handleProfileMenu()
         navigate('/login')
     }

@@ -6,7 +6,7 @@ import Loader from '../commons/Loader/Loader'
 import classes from './Coins.module.scss'
 import { parentPort } from 'worker_threads'
 import AddToPortfolioPopupMenu from '../commons/AddToPortfolioPopupMenu/AddToPortfolioPopupMenu'
-import { portfoliosContext } from '../../AppContainer'
+import { currentUserContext, portfoliosContext } from '../../AppContainer'
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 interface coinsProps {
@@ -29,6 +29,7 @@ const Coins: React.FC<coinsProps> = (props) => {
     })
 
     const portfolios = useContext(portfoliosContext)
+    const currentUser = useContext(currentUserContext)
 
     useEffect(() => {
         setIsPending(true)
@@ -159,14 +160,18 @@ const Coins: React.FC<coinsProps> = (props) => {
                                     <img src={`../../../animalIcons/graph.png`} />
                                 </li>
                             </ul>
-                            <div className={classes.options} onClick={() => togglePopupOptions(c.id)}>
-                                <div className={classes.empty}></div>
-                                <AddRoundedIcon
-                                    className={classes.coins_dots}
-                                    onClick={() => handleAddToPortfolioMenuOpen(c.id, c.name, c.image)}
-                                />
-                            </div>
-                            <div className={classes.empty}></div>
+                            {currentUser ?
+                                <>
+                                    <div className={classes.options} onClick={() => togglePopupOptions(c.id)}>
+                                        <div className={classes.empty}></div>
+                                        <AddRoundedIcon
+                                            className={classes.coins_dots}
+                                            onClick={() => handleAddToPortfolioMenuOpen(c.id, c.name, c.image)}
+                                        />
+                                    </div>
+                                    <div className={classes.empty}></div>
+                                </>
+                                : null}
                         </div>
                     ))}
             </div>
