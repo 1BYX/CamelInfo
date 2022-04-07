@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useLayoutEffect, useState } from 'react'
 import App from './App'
-import { getCurrentUser } from './components/API/authAPI'
+import { getCurrentUser, isLoggedIn } from './components/API/authAPI'
 import { getPrices } from './components/API/coinsAPI'
 import { getPortfolios } from './components/API/portfolioApi'
 import { portfolioObject } from './Interfaces/PortfolioInterfaces'
@@ -96,13 +96,15 @@ const AppContainer = () => {
 
     const fetchUser = async () => {
         const token = localStorage.getItem('token')
-        if (token && token !== '') {
+        if (token && token !== '' && isLoggedIn()) {
             const response = await getCurrentUser()
             const returnedUser = response.user
             setCurrentUser({
                 id: returnedUser._id,
                 username: returnedUser.username
             })
+        } else {
+            // localStorage.removeItem('expires')
         }
     }
 

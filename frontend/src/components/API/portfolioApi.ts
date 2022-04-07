@@ -1,6 +1,7 @@
 import { newPortfolioPayload } from '../../Interfaces/PortfolioInterfaces';
 import axios from 'axios'
 import { coinObject } from '../../Interfaces/CoinInterfaces';
+import { isLoggedIn } from './authAPI';
 
 const instance = axios.create({
     baseURL: 'http://localhost:5000/portfolios',
@@ -9,8 +10,8 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
     config => {
-        const token = localStorage.getItem('token');
-        if (token) {
+        const token = localStorage.getItem('token')
+        if (token && isLoggedIn()) {
             if (config.headers) {
                 config.headers.Authorization = token
             }

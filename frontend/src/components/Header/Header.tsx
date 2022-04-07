@@ -7,8 +7,6 @@ import Button from '@mui/material/Button'
 import { currentUserContext, currentUserInterface, updateCurrentUserContext, updatePortfoliosContext } from '../../AppContainer'
 import AreYouSureMenu from '../commons/AreYouSure/AreYouSureMenu'
 import { Switch } from '@mui/material'
-import LightModeIcon from '@mui/icons-material/LightMode';
-import NightlightRoundIcon from '@mui/icons-material/NightlightRound';
 
 const Header: React.FC = () => {
 
@@ -60,6 +58,7 @@ const Header: React.FC = () => {
     const handleLogout = () => {
         setLogoutMenuOpen(false)
         localStorage.removeItem('token')
+        localStorage.removeItem('expires')
         updateCurrentUser(null)
         updatePortfolios([])
         handleProfileMenu()
@@ -87,13 +86,6 @@ const Header: React.FC = () => {
                     className={`${classes.header__content__nav} ${menuOpen && size.width < 768 ? classes.isMenu : ""}`}
                 >
                     <ul className={classes.header_content_nav_list}>
-                        <li>
-                            <Switch
-                                color="default"
-                            // checkedIcon={<NightlightRoundIcon style={{ 'width': '10px' }} />}
-                            // icon={<LightModeIcon />}
-                            />
-                        </li>
                         <li>
                             <Link to="/" onClick={handleMenuClose}>
                                 Home
