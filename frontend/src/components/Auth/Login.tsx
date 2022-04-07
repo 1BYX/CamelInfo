@@ -62,7 +62,6 @@ const Login: React.FC = () => {
                 })
             } else {
                 const response = await login(username, password)
-                console.log(response)
                 if (response.success === true) {
                     setUsername('')
                     setPassword('')
@@ -88,22 +87,26 @@ const Login: React.FC = () => {
     }
 
     return (
-        <div className={classes.login}>
-            <form className={classes.login_wrapper} onSubmit={handleLogin}>
-                <div className={classes.login_input}>
-                    <TextField error={usernameError.present} helperText={usernameError.msg} variant="standard" label="Username" name="username" onChange={(e) => handleChangeUsername(e)} value={username} />
+        <>
+            {currentUser ? <Navigate to='/portfolios' /> :
+                <div className={classes.login}>
+                    <form className={classes.login_wrapper} onSubmit={handleLogin}>
+                        <div className={classes.login_input}>
+                            <TextField error={usernameError.present} helperText={usernameError.msg} variant="standard" label="Username" name="username" onChange={(e) => handleChangeUsername(e)} value={username} />
+                        </div>
+                        <div className={classes.login_input}>
+                            <TextField error={passwordError.present} helperText={passwordError.msg} variant="standard" label="Password" name="password" type="password" onChange={(e) => handleChangePassword(e)} value={password} />
+                        </div>
+                        <div className={classes.login_button}>
+                            <div className={classes.login_button_wrapper}>
+                                <Button variant="contained" color="warning" type="submit">Log in</Button>
+                                <Link to='/register'><span>Sign Up</span></Link>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-                <div className={classes.login_input}>
-                    <TextField error={passwordError.present} helperText={passwordError.msg} variant="standard" label="Password" name="password" type="password" onChange={(e) => handleChangePassword(e)} value={password} />
-                </div>
-                <div className={classes.login_button}>
-                    <div className={classes.login_button_wrapper}>
-                        <Button variant="contained" color="warning" type="submit">Log in</Button>
-                        <Link to='/register'><span>Sign Up</span></Link>
-                    </div>
-                </div>
-            </form>
-        </div>
+            }
+        </>
     )
 }
 

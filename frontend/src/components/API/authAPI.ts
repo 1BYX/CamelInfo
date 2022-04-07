@@ -16,9 +16,6 @@ export const getExpiration = () => {
 }
 
 export const isLoggedIn = () => {
-    console.log(getExpiration())
-    console.log(moment())
-    console.log(moment().isBefore(getExpiration()))
     return moment().isBefore(getExpiration())
 }
 
@@ -27,7 +24,6 @@ export const login = async (username: string, password: string) => {
         const res = await instance.post('/login', { username: username, password: password })
         const token = res.data.token
         const expires = moment().add(Number(res.data.expiresIn.slice(0, res.data.expiresIn.length - 1)), res.data.expiresIn[res.data.expiresIn.length - 1])
-        console.log(res.data)
         localStorage.setItem('token', token)
         localStorage.setItem('expires', JSON.stringify(expires.valueOf()))
         return res.data
