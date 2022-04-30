@@ -39,7 +39,7 @@ router.post('/login', (req, res, next) => {
         if (isValid) {
             const tokenObject = issueJWT(user);
 
-            res.status(200).json({ success: true, user: user, token: tokenObject.token, expires: tokenObject.expires })
+            res.status(200).json({ success: true, user: user, token: tokenObject.token, expiresIn: tokenObject.expires })
         } else {
             res.status(401).json({ success: false, msg: 'invalid password' })
         }

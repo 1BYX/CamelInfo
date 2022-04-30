@@ -53,6 +53,7 @@ export const updatePortfolio = async (portfolioId: string | undefined, payload: 
 export const addCoin = async (addedCoin: coinObject, portfolioId: string, spent: number) => {
     const res = await instance.put('/addCoin', { addedCoin: addedCoin, portfolioId: portfolioId, spent: spent })
     // export const deleteCoin = async (coinId: string)
+    console.log(res)
     return res.data
 }
 

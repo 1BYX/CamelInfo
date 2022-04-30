@@ -16,7 +16,6 @@ interface insidePortfolioProps {
 }
 
 
-
 const InsidePortfolio: React.FC<insidePortfolioProps> = (props) => {
 
     const [popupOptionsOpen, setPopupOptionsOpen] = useState({ isOpen: false, id: '' })

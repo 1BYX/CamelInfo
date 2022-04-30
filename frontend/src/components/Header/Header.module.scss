@@ -9,7 +9,7 @@
     z-index: 999;
 
     @include breakpoint(md) {
-        padding: 0 2rem;
+        padding: 0 3rem;
     }
     @include breakpoint(lg) {
         padding: 0 5rem;
@@ -87,7 +87,7 @@
                         margin-bottom: $spacing-lg;
                         @include breakpoint(md) {
                             margin-bottom: 0;
-                            // margin-right: $spacing-md;
+                            margin-right: $spacing-md;
                         }
                         @include breakpoint(lg) {
                             margin-bottom: 0;

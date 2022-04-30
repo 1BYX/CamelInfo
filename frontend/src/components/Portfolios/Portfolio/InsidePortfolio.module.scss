@@ -217,7 +217,7 @@
         }
 
         &_addButton {
-            width: 100%;
+            width: max-content;
             height: 70px;
             display: grid;
             justify-items: start;
@@ -242,7 +242,7 @@
             display: grid;
             grid-template-columns: 25px minmax(auto, 800px) 25px;
             align-items: center;
-            justify-items: center;
+            justify-items: start;
             justify-content: center;
             grid-column-gap: 2%;
         }

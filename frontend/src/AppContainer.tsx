@@ -25,6 +25,8 @@ export const revenuesContext = React.createContext<Array<{
 export const updateRevenuesContext = React.createContext<((portfolioId: string, revenue: number) => void)>(() => { })
 
 export const pricesContext = React.createContext<any>([])
+export const coinsContext = React.createContext<any>([])
+export const updateCoinsContext = React.createContext<any>([])
 
 const AppContainer = () => {
 
@@ -37,6 +39,7 @@ const AppContainer = () => {
         portfolioId: string
         revenue: number
     }>>([])
+    const [coins, setCoins] = useState<any>([])
 
     const updateRevenues = (portfolioId: string, revenue: number) => {
         for (let i = 0; i < portfolios.length; i++) {
@@ -156,7 +159,8 @@ const AppContainer = () => {
         //     if (Object.keys(newPrices).length > 0) {
         //         setDynamicPrices({ ...newPrices })
         //     }
-        // }, 4000)
+        //     console.log(newPrices)
+        // }, 6000)
     }, [portfolios])
 
     return (
@@ -168,7 +172,9 @@ const AppContainer = () => {
                             <pricesContext.Provider value={dynamicPrices}>
                                 <revenuesContext.Provider value={revenues}>
                                     <updateRevenuesContext.Provider value={updateRevenues}>
-                                        <App />
+                                        <coinsContext.Provider value={coins}>
+                                            <App />
+                                        </coinsContext.Provider>
                                     </updateRevenuesContext.Provider>
                                 </revenuesContext.Provider>
                             </pricesContext.Provider>

@@ -8,6 +8,7 @@ import { parentPort } from 'worker_threads'
 import AddToPortfolioPopupMenu from '../commons/AddToPortfolioPopupMenu/AddToPortfolioPopupMenu'
 import { currentUserContext, portfoliosContext } from '../../AppContainer'
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import { Link } from 'react-router-dom'
 
 interface coinsProps {
     coins: any
@@ -131,6 +132,7 @@ const Coins: React.FC<coinsProps> = (props) => {
                     ))
                     .map((c: any) => (
                         <div className={classes.coins_instance_wrapper} key={c.id}>
+                            {/* to={`${c.id}`} */}
                             <div className={classes.numerator}>{c.market_cap_rank}</div>
                             <ul className={classes.coins_instance}>
                                 <li className={classes.coins_instance_img}>

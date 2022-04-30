@@ -47,7 +47,6 @@ router.delete('/', passport.authenticate('jwt', { session: false }), async (req,
     } catch (err) {
         res.status(500).json({ success: false, error: err, msg: "Error deleting portfolio, please try again" })
     }
-
 })
 
 router.put('/', passport.authenticate('jwt', { session: false }), async (req, res) => {

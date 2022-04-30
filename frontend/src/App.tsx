@@ -11,6 +11,8 @@ import Register from './components/Auth/Register'
 import CoinsContainer from './components/Coins/CoinsContainer'
 import InsidePortfolioContainer from './components/Portfolios/Portfolio/InsidePortfolioContainer'
 import MaterialUISwitch from './components/commons/DarkThemeSwitch/DarkThemeSwitch'
+import TestChart from './test/TestChart'
+import InsideCoinContainer from './components/Coins/InsideCoin/InsideCoinContainer'
 
 export const updateSnackbarContext = React.createContext<(type: string, msg: string) => void>((type: string, msg: string) => { })
 
@@ -83,12 +85,13 @@ const App: React.FC = () => {
                 </div>
               </Snackbar> : null}
               <Routes>
+                <Route path='/coins/:id' element={<InsideCoinContainer />} />
                 <Route path='/portfolios/:id' element={<InsidePortfolioContainer />} />
                 <Route path='/portfolios' element={<PortfoliosContainer />} />
                 <Route path='/coins' element={<CoinsContainer />} />
                 <Route path='/login' element={<Login />} />
                 <Route path='/register' element={<Register />} />
-                <Route path='/' element={null} />
+                <Route path='/' element={<TestChart />} />
               </Routes>
             </div>
           </div>
